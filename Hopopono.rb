@@ -61,7 +61,9 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_kick, mix: 0.5 do
     sleep 96
     ### C ###
     sleep 31.5
-  end
+    ### D ###
+    sleep 64
+end
 end
 
 with_fx :reverb, room: 0.6, amp: amp_master*amp_snare, mix: 0.5 do
@@ -85,6 +87,8 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_snare, mix: 0.5 do
     sleep 96
     ### C ###
     sleep 31.5
+    ### D ###
+    sleep 64
   end
 end
 
@@ -114,6 +118,28 @@ end
 define :play_bpC do
   play_pattern_timed [:f3, :f3, :r, :f3, :f3, :c3, :f2], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1.5], release: 0.5
 end
+
+define :play_bpD1 do
+  play_pattern_timed [:g2, :d3, :g3, :g3, :r, :g3, :d3, :b2], [0.5, 0.25, 0.5, 0.5, 1.25, 0.25, 0.25, 0.5], release: 0.5
+end
+
+define :play_bpD2 do
+  play_pattern_timed [:a2, :e3, :a3, :a3, :e3, :b2, :e2], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
+end
+
+define :play_bpD3 do
+  play_pattern_timed [:c3, :g3, :c4, :c4, :r], [0.5, 0.25, 0.5, 0.5, 2.25], release: 0.5
+end
+
+define :play_bpD4 do |partial|
+  play_pattern_timed [:c3, :c3, :g3, :c4, :c4], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.5
+  if partial
+    sleep 1
+  else
+    play_pattern_timed [:c4, :g3, :e3, :c3], [0.25, 0.25, 0.25, 0.25], release: 0.5
+  end
+end
+
 
 with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
   live_loop :bass do
@@ -162,6 +188,14 @@ with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
     2.times do
       play_bpC
     end
+
+    ### D ###
+    4.times do |i|
+      play_bpD1
+      play_bpD2
+      play_bpD3
+      play_bpD4(i==3) #the last one is partial pattern
+    end
   end
 end
 
@@ -189,6 +223,8 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_left, mix: 0.7 do
     sleep 96
     ### C ###
     sleep 31.5
+    ### D ###
+    sleep 64
   end
 end
 
@@ -224,6 +260,8 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_right, mix: 0.6 do
     sleep 96
     ### C ###
     sleep 31.5
+    ### D ###
+    sleep 64
   end
 end
 
