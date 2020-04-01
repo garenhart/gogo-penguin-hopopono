@@ -7,12 +7,15 @@ bpm_fast = 106
 
 # mixer
 amp_master = 1
-amp_kick = 0.5
-amp_snare = 1
-amp_hats = 0.5
-amp_bass = 0.3
-amp_piano_left = 1
-amp_piano_right = 1
+amp_kick = 0.3
+amp_snare = 0.3
+amp_hats = 0.3
+amp_bass = 0.2
+amp_piano_left = 0.5
+amp_piano_right = 0.5
+
+amp_forte = 1.5
+amp_piano = 0.5
 
 gogo_chord1 = [:G2, :D3, :B3]
 gogo_chord2 = [:A2, :E3, :C4]
@@ -119,12 +122,18 @@ define :play_bpC do
   play_pattern_timed [:f3, :f3, :r, :f3, :f3, :c3, :f2], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1.5], release: 0.5
 end
 
-define :play_bpD1 do
-  play_pattern_timed [:g2, :d3, :g3, :g3, :r, :g3, :d3, :b2], [0.5, 0.25, 0.5, 0.5, 1.25, 0.25, 0.25, 0.5], release: 0.5
+
+define :play_bpD1 do |base, partial|
+  play_pattern_timed [base, base+7, base+12, base+12, :r], [0.5, 0.25, 0.5, 0.5, 1.25], release: 0.5
+  if partial
+    sleep 1
+  else
+    play_pattern_timed [base+12, base+7, base+4], [0.25, 0.25, 0.5], release: 0.5
+  end
 end
 
-define :play_bpD2 do
-  play_pattern_timed [:a2, :e3, :a3, :a3, :e3, :b2, :e2], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
+define :play_bpD2 do |base, d1, d2, d3|
+  play_pattern_timed [base, base+7, base+12, base+12, base+d1, base+d2, base+d3], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
 end
 
 define :play_bpD3 do
@@ -141,9 +150,9 @@ define :play_bpD4 do |partial|
 end
 
 
-with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
-  live_loop :bass do
-    use_synth :fm
+live_loop :bass do
+  use_synth :fm
+  with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
     ### A ###
     sleep 16
     4.times do |i|
@@ -188,13 +197,15 @@ with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
     2.times do
       play_bpC
     end
+  end
 
     ### D ###
+  with_fx :reverb, room: 0.9, amp: amp_forte*amp_master*amp_bass, mix: 0.4 do
     4.times do |i|
-      play_bpD1
-      play_bpD2
-      play_bpD3
-      play_bpD4(i==3) #the last one is partial pattern
+      play_bpD1(:g2, false)
+      play_bpD2(:a2, 7, 2, -5)
+      play_bpD1(:c3, true)
+      play_bpD4(i==3) # the last one is a partial pattern
     end
   end
 end
