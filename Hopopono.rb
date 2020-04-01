@@ -3,14 +3,14 @@
 use_debug true
 
 bpm_slow = 90
-bpm_fast = 102
+bpm_fast = 106
 
 # mixer
 amp_master = 1
 amp_kick = 0.5
 amp_snare = 1
 amp_hats = 0.5
-amp_bass = 0.5
+amp_bass = 0.3
 amp_piano_left = 1
 amp_piano_right = 1
 
@@ -59,6 +59,8 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_kick, mix: 0.5 do
     
     ### B ###
     sleep 96
+    ### C ###
+    sleep 31.5
   end
 end
 
@@ -81,11 +83,12 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_snare, mix: 0.5 do
     
     ### B ###
     sleep 96
+    ### C ###
+    sleep 31.5
   end
 end
 
 # bass pattern blocks
-
 define :play_bpA do
   play :G3, release: 4
   sleep 4
@@ -108,6 +111,10 @@ define :play_bpB3 do |n1, n2, n3, n4|
   play_pattern_timed [:c3, :c3, n1, :c4, :g3, n2, n3, n4], [0.5, 0.5, 0.75, 0.5, 0.5, 0.5, 0.25, 0.5], release: 0.5
 end
 
+define :play_bpC do
+  play_pattern_timed [:f3, :f3, :r, :f3, :f3, :c3, :f2], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1.5], release: 0.5
+end
+
 with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
   live_loop :bass do
     use_synth :fm
@@ -123,7 +130,6 @@ with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
     sleep 6 #22
     
     ### B ###
-    
     6.times do |i|
       play_bpB1(:g3)
       
@@ -146,7 +152,16 @@ with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
       end
     end
     
-    
+    ### C ###
+    play_bpB1(:bb3)
+    play_pattern_timed [:g3, :g3, :r, :f3, :f3, :r], [0.5, 0.5, 0.75, 0.5, 0.5, 0.75], release: 0.5 # bar 48 (7/8)
+    play_pattern_timed [:eb3, :eb3, :r, :g2, :eb3, :eb3, :r, :g2], [0.5, 0.5, 0.5, 0.25, 0.5, 0.5, 1, 0.25], release: 0.5
+    play_pattern_timed [:eb3, :eb3, :r, :g2, :eb3, :eb3, :eb3, :eb3, :f3], [0.5, 0.5, 0.5, 0.25, 0.5, 0.5, 0.5, 0.25, 0.5], release: 0.5
+    play_bpB1(:bb3)
+    play_pattern_timed [:g3, :g3, :r, :g3, :eb3, :bb3, :eb4, :r], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 0.5, 1], release: 0.5
+    2.times do
+      play_bpC
+    end
   end
 end
 
@@ -172,6 +187,8 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_left, mix: 0.7 do
     
     ### B ###
     sleep 96
+    ### C ###
+    sleep 31.5
   end
 end
 
@@ -205,6 +222,8 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_right, mix: 0.6 do
     
     ### B ###
     sleep 96
+    ### C ###
+    sleep 31.5
   end
 end
 
