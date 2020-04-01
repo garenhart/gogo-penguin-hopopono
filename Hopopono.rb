@@ -1,15 +1,17 @@
 # GO GO PENGUIN - HOPOPONO
 
 use_debug true
-use_bpm 90
+
+bpm_slow = 90
+bpm_fast = 102
 
 # mixer
 amp_master = 1
 amp_kick = 0.5
 amp_snare = 1
 amp_hats = 0.5
-amp_bass = 0.3
-amp_piano_left = 2
+amp_bass = 0.5
+amp_piano_left = 1
 amp_piano_right = 1
 
 gogo_chord1 = [:G2, :D3, :B3]
@@ -25,12 +27,11 @@ define :gogo_snare do
   sample :drum_snare_soft, rpitch: 6
 end
 
-define :gogo_bass do |pitch|
-  sample :bass_thick_c, pitch: pitch
-end
+use_bpm bpm_slow
 
 with_fx :reverb, room: 0.6, amp: amp_master*amp_kick, mix: 0.5 do
   live_loop :drum_kick do
+    ### A ###
     18.times do |i|
       bar = i+1
       puts "bar %d" %bar
@@ -53,13 +54,17 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_kick, mix: 0.5 do
       end
     end
     gogo_kick
-    use_bpm 102
+    use_bpm bpm_fast
     sleep 14 # 22
+    
+    ### B ###
+    sleep 96
   end
 end
 
 with_fx :reverb, room: 0.6, amp: amp_master*amp_snare, mix: 0.5 do
   live_loop :drum_snare do
+    ### A ###
     18.times do
       sleep 1
       gogo_snare
@@ -71,36 +76,84 @@ with_fx :reverb, room: 0.6, amp: amp_master*amp_snare, mix: 0.5 do
       sleep 0.25
       sleep 1
     end
-    use_bpm 102
+    use_bpm bpm_fast
     sleep 14 #22
+    
+    ### B ###
+    sleep 96
   end
+end
+
+# bass pattern blocks
+
+define :play_bpA do
+  play :G3, release: 4
+  sleep 4
+  play :A3, release: 1.75
+  sleep 1.75
+  play :E3, release: 2.25
+  sleep 2.25
+  play_chord [:C3, :E4], sustain_level: 1.2, release: 6
+end
+
+define :play_bpB1 do |note|
+  play_pattern_timed [note, note, :r, note, note, note, :r], [0.5, 0.5, 0.5, 0.25, 0.5, 0.5, 1.25], release: 0.5
+end
+
+define :play_bpB2 do |n1, n2, n3|
+  play_pattern_timed [:c4, :c4, :r, n1, :e3, :b2, :e2, n2, n3], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1, 0.25, 0.25], release: 0.5
+end
+
+define :play_bpB3 do |n1, n2, n3, n4|
+  play_pattern_timed [:c3, :c3, n1, :c4, :g3, n2, n3, n4], [0.5, 0.5, 0.75, 0.5, 0.5, 0.5, 0.25, 0.5], release: 0.5
 end
 
 with_fx :reverb, room: 0.9, amp: amp_master*amp_bass, mix: 0.4 do
   live_loop :bass do
     use_synth :fm
+    ### A ###
     sleep 16
     4.times do |i|
-      play :G3, release: 4
-      sleep 4
-      play :A3, release: 1.75
-      sleep 1.75
-      play :E3, release: 2.25
-      sleep 2.25
-      play_chord [:C2, :E3], sustain_level: 1.2, release: 8
+      play_bpA
       if (i == 3)
-        use_bpm 102
+        use_bpm bpm_fast
       end
       sleep 8
     end
     sleep 6 #22
+    
+    ### B ###
+    
+    6.times do |i|
+      play_bpB1(:g3)
+      
+      if i<2
+        play_bpB2(:r, :b2, :d3)
+      elsif 1<i && i<4
+        play_bpB2(:a3, :b2, :d3)
+      else
+        play_bpB2(:a3, :e4, :e3)
+      end
+      
+      play_bpB1(:c3)
+      
+      if i==0
+        play_bpB3(:r, :c4, :g3, :c3)
+      elsif i==3
+        play_bpB3(:c3, :d4, :ds4, :e4)
+      else
+        play_bpB3(:c3, :c4, :g3, :c3)
+      end
+    end
+    
+    
   end
 end
 
-
-with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_left, mix: 0.6 do
+with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_left, mix: 0.7 do
   live_loop :piano_left do
     use_synth :piano
+    ### A ###
     sleep 16
     4.times do |i|
       play_chord gogo_chord1, sustain: 3
@@ -111,21 +164,25 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_left, mix: 0.6 do
       sleep 2.25
       play_chord gogo_chord4, sustain: 7
       if (i == 3)
-        use_bpm 102
+        use_bpm bpm_fast
       end
       sleep 8
     end
     sleep 6
+    
+    ### B ###
+    sleep 96
   end
 end
 
 
-# right hand pattern sets
+# right hand pattern blocks
 rh_pattern = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
 
 with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_right, mix: 0.6 do
   live_loop :piano_right do
     use_synth :piano
+    ### A ###
     sleep 48
     2.times do |i|
       play :A5, sustain: 4
@@ -139,12 +196,15 @@ with_fx :reverb, room: 0.8, amp: amp_master*amp_piano_right, mix: 0.6 do
       if (i==0)
         sleep 8
       else # end of second time
-        use_bpm 102
+        use_bpm bpm_fast
         14.times do
           play_pattern_timed rh_pattern.tick, [0.25]
         end
       end
     end
+    
+    ### B ###
+    sleep 96
   end
 end
 
