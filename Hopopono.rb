@@ -35,9 +35,9 @@ end
 
 use_bpm bpm_slow
 
-live_loop :drum_kick do
-  ### A ###
-  with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
+with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
+  live_loop :drum_kick do
+    ### A ###
     18.times do |i|
       bar = i+1
       puts "bar %d" %bar
@@ -62,20 +62,19 @@ live_loop :drum_kick do
     use_bpm bpm_fast
     gogo_kick
     sleep 14 # 22
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
   end
-  
-  ### B ###
-  sleep 96
-  ### C ###
-  sleep 31.5
-  ### D ###
-  sleep 64
 end
 
-
-live_loop :drum_snare do
-  ### A ###
-  with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
+with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
+  live_loop :drum_snare do
+    ### A ###
     18.times do
       sleep 1
       gogo_snare
@@ -89,15 +88,16 @@ live_loop :drum_snare do
     end
     use_bpm bpm_fast
     sleep 14 #22
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
   end
-  
-  ### B ###
-  sleep 96
-  ### C ###
-  sleep 31.5
-  ### D ###
-  sleep 64
 end
+
 
 # bass pattern functions
 define :play_bpA do
@@ -153,11 +153,11 @@ define :play_bpD4 do |partial|
   end
 end
 
-
-live_loop :bass do
-  use_synth :fm
-  with_fx :reverb, room: 0.9, amp: amp_factor_mp*amp_master*amp_bass, mix: 0.4 do
+with_fx :reverb, room: 0.9, mix: 0.4 do |r|
+  live_loop :bass do
+    use_synth :fm
     ### A ###
+    control r, amp: amp_factor_mp*amp_master*amp_bass
     sleep 16
     4.times do |i|
       play_bpA
@@ -167,9 +167,8 @@ live_loop :bass do
       sleep 8
     end
     sleep 6 #22
-  end
-  
-  with_fx :reverb, room: 0.9, amp: amp_factor_mf*amp_master*amp_bass, mix: 0.4 do
+    
+    control r, amp: amp_factor_mf*amp_master*amp_bass
     ### B ###
     6.times do |i|
       play_bpB1(:g3)
@@ -203,9 +202,8 @@ live_loop :bass do
     2.times do
       play_bpC
     end
-  end
-  
-  with_fx :reverb, room: 0.9, amp: amp_factor_f*amp_master*amp_bass, mix: 0.4 do
+    
+    control r, amp: amp_factor_f*amp_master*amp_bass
     ### D ###
     4.times do |i|
       play_bpD1(:g2, false)
@@ -216,10 +214,10 @@ live_loop :bass do
   end
 end
 
-live_loop :piano_left do
-  use_synth :piano
-  ### A ###
-  with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0.7 do
+with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0.7 do
+  live_loop :piano_left do
+    use_synth :piano
+    ### A ###
     sleep 16
     4.times do |i|
       play_chord gogo_chord1, sustain: 3
@@ -235,23 +233,23 @@ live_loop :piano_left do
       sleep 8
     end
     sleep 6
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
   end
-  
-  ### B ###
-  sleep 96
-  ### C ###
-  sleep 31.5
-  ### D ###
-  sleep 64
 end
 
 # right hand pattern blocks
 rh_pattern = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
 
-live_loop :piano_right do
-  use_synth :piano
-  ### A ###
-  with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 0.6 do
+with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 0.6 do
+  live_loop :piano_right do
+    use_synth :piano
+    ### A ###
     sleep 48
     2.times do |i|
       play :A5, sustain: 4
@@ -271,14 +269,14 @@ live_loop :piano_right do
         end
       end
     end
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
   end
-  
-  ### B ###
-  sleep 96
-  ### C ###
-  sleep 31.5
-  ### D ###
-  sleep 64
 end
 
 
