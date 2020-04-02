@@ -140,10 +140,6 @@ define :play_bpD2 do |base, d1, d2, d3|
   play_pattern_timed [base, base+7, base+12, base+12, base+d1, base+d2, base+d3], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
 end
 
-define :play_bpD3 do
-  play_pattern_timed [:c3, :g3, :c4, :c4, :r], [0.5, 0.25, 0.5, 0.5, 2.25], release: 0.5
-end
-
 define :play_bpD4 do |partial|
   play_pattern_timed [:c3, :c3, :g3, :c4, :c4], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.5
   if partial
@@ -156,8 +152,8 @@ end
 with_fx :reverb, room: 0.9, mix: 0.4 do |r|
   live_loop :bass do
     use_synth :fm
-    ### A ###
     control r, amp: amp_factor_mp*amp_master*amp_bass
+    ### A ###
     sleep 16
     4.times do |i|
       play_bpA
