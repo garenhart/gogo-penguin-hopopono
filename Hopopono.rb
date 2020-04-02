@@ -10,7 +10,7 @@ amp_master = 1
 amp_kick = 0.5
 amp_snare = 0.5
 amp_hats = 0.5
-amp_bass = 0.3
+amp_bass = 0.4
 amp_piano_left = 0.6
 amp_piano_right = 0.6
 
@@ -167,7 +167,9 @@ live_loop :bass do
       sleep 8
     end
     sleep 6 #22
-    
+  end
+  
+  with_fx :reverb, room: 0.9, amp: amp_factor_mf*amp_master*amp_bass, mix: 0.4 do
     ### B ###
     6.times do |i|
       play_bpB1(:g3)
@@ -203,8 +205,8 @@ live_loop :bass do
     end
   end
   
-  ### D ###
   with_fx :reverb, room: 0.9, amp: amp_factor_f*amp_master*amp_bass, mix: 0.4 do
+    ### D ###
     4.times do |i|
       play_bpD1(:g2, false)
       play_bpD2(:a2, 7, 2, -5)
