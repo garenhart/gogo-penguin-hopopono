@@ -69,6 +69,8 @@ with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
     sleep 31.5
     ### D ###
     sleep 64
+    ### E ###
+    sleep 32
   end
 end
 
@@ -95,6 +97,8 @@ with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
     sleep 31.5
     ### D ###
     sleep 64
+    ### E ###
+    sleep 32
   end
 end
 
@@ -140,12 +144,12 @@ define :play_bpD2 do |base, d1, d2, d3|
   play_pattern_timed [base, base+7, base+12, base+12, base+d1, base+d2, base+d3], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
 end
 
-define :play_bpD4 do |partial|
-  play_pattern_timed [:c3, :c3, :g3, :c4, :c4], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.5
+define :play_bpD4 do |base, partial|
+  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.5
   if partial
     sleep 1
   else
-    play_pattern_timed [:c4, :g3, :e3, :c3], [0.25, 0.25, 0.25, 0.25], release: 0.5
+    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
   end
 end
 
@@ -205,8 +209,19 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
       play_bpD1(:g2, false)
       play_bpD2(:a2, 7, 2, -5)
       play_bpD1(:c3, true)
-      play_bpD4(i==3) # the last one is a partial pattern
+      play_bpD4(:c3, i==3) # the last one is a partial pattern
     end
+    
+    ### E ###
+    play_bpD1(:bb2, true)
+    play_bpD2(:g2, 10, 5, -2)
+    play_bpD1(:eb3, true)
+    play_pattern_timed [:eb3, :bb3, :eb4, :eb4, :r, :eb4, :bb3, :g3, :f3], [0.5, 0.25, 0.5, 0.5, 1.25, 0.25, 0.25, 0.25, 0.25], release: 0.5
+    
+    play_bpD1(:bb2, true)
+    play_bpD2(:g2, 8, 15, 20)
+    play_bpD1(:f3, true)
+    play_bpD4(:f3, true)
   end
 end
 
@@ -236,6 +251,8 @@ with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0
     sleep 31.5
     ### D ###
     sleep 64
+    ### E ###
+    sleep 32
   end
 end
 
@@ -272,6 +289,8 @@ with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 
     sleep 31.5
     ### D ###
     sleep 64
+    ### E ###
+    sleep 32
   end
 end
 
