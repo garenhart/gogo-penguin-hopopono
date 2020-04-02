@@ -19,7 +19,7 @@ amp_master = 1
 amp_kick = 0.5
 amp_snare = 0.5
 amp_hats = 0.5
-amp_bass = 0.4
+amp_bass = 0.3
 amp_piano_left = 0.6
 amp_piano_right = 0.6
 
@@ -157,10 +157,10 @@ define :play_bpD2 do |base, d1, d2, d3|
   play_pattern_timed [base, base+7, base+12, base+12, base+d1, base+d2, base+d3], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
 end
 
-define :play_bpD4 do |base, partial|
-  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.5
+define :play_bpD4 do |base, pause, partial|
+  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 2.75-pause], release: 0.5
   if partial
-    sleep 1
+    sleep pause
   else
     play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
   end
@@ -222,7 +222,7 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
       play_bpD1(:g2, false)
       play_bpD2(:a2, 7, 2, -5)
       play_bpD1(:c3, true)
-      play_bpD4(:c3, i==3) # the last one is a partial pattern
+      play_bpD4(:c3, 1, i==3) # the last one is a partial pattern
     end
     
     ### E ###
@@ -234,13 +234,13 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
     play_bpD1(:bb2, true)
     play_bpD2(:g2, 8, 15, 20)
     play_bpD1(:f3, true)
-    play_bpD4(:f3, true)
+    play_bpD4(:f3, 1, true)
     
     ### F ###
     play_bpD1(:g2, false)
     play_bpD2(:a2, 7, 2, -5)
     play_bpD1(:c3, true)
-    play_bpD4(:c3, true)
+    play_bpD4(:c3, 2.25, true)
     play_bpA
     sleep 8
     
