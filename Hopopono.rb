@@ -1,4 +1,13 @@
-# GO GO PENGUIN - HOPOPONO
+##################################################################
+# GOGO PENGUIN - HOPOPONO                                        #
+# Original video: https://www.youtube.com/watch?v=-UtAV_azaBc    #
+#                                                                #
+# Transcription by Ben Spooner:                                  #
+# https://www.youtube.com/watch?v=2MMsHGb8MRw                    #
+#                                                                #
+# Coded by Garen Hartunian                                       #
+#                                                                #
+##################################################################
 
 use_debug true
 
