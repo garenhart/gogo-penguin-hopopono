@@ -71,6 +71,8 @@ with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
     sleep 64
     ### E ###
     sleep 32
+    ### F-G ###
+    sleep 64
   end
 end
 
@@ -99,6 +101,8 @@ with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
     sleep 64
     ### E ###
     sleep 32
+    ### F-G ###
+    sleep 64
   end
 end
 
@@ -222,8 +226,24 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
     play_bpD2(:g2, 8, 15, 20)
     play_bpD1(:f3, true)
     play_bpD4(:f3, true)
+    
+    ### F ###
+    play_bpD1(:g2, false)
+    play_bpD2(:a2, 7, 2, -5)
+    play_bpD1(:c3, true)
+    play_bpD4(:c3, true)
+    play_bpA
+    sleep 8
+    
+    control r, amp: amp_factor_mp*amp_master*amp_bass
+    ### G ###
+    2.times do
+      play_bpA
+      sleep 8
+    end
   end
 end
+
 
 with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0.7 do
   live_loop :piano_left do
@@ -253,6 +273,8 @@ with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0
     sleep 64
     ### E ###
     sleep 32
+    ### F-G ###
+    sleep 64
   end
 end
 
@@ -291,6 +313,8 @@ with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 
     sleep 64
     ### E ###
     sleep 32
+    ### F-G ###
+    sleep 64
   end
 end
 
