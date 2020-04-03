@@ -17,7 +17,7 @@ bpm_fast = 106
 # mixer
 amp_master = 1
 amp_kick = 0.5
-amp_snare = 0.5
+amp_snare = 0.6
 amp_hats = 0.5
 amp_bass = 0.3
 amp_piano_left = 0.6
@@ -49,19 +49,15 @@ end
 
 # drum pattern functions
 
-define :play_dpA do |extra_kick, cymbal1, cymbal2|
+define :play_dkpA do |extra_kick|
   gogo_kick
-  gogo_cymbal if (cymbal1 || cymbal2)
   sleep 1
-  gogo_snare
   sleep 0.75
   gogo_kick
-  gogo_cymbal if cymbal2
   sleep 0.25
   sleep 0.25
   gogo_kick
   sleep 0.5
-  gogo_snare
   sleep 0.25
   if (extra_kick) # one more kick
     sleep 0.25
@@ -73,20 +69,33 @@ define :play_dpA do |extra_kick, cymbal1, cymbal2|
   end
 end
 
+define :play_dspA do
+  sleep 1
+  gogo_snare
+  sleep 1.75
+  gogo_snare
+  sleep 1.25
+end
+
+define :play_dcpA do |cymbal1, cymbal2|
+  gogo_cymbal if (cymbal1 || cymbal2)
+  sleep 1.75
+  gogo_cymbal if cymbal2
+  sleep 2.25
+end
+
 use_bpm bpm_slow
 
-with_fx :reverb, room: 0.4, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
-  live_loop :drum do
+with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+  live_loop :drum_kick do
+    control r, amp: amp_factor_mp*amp_master*amp_kick
     ### A ###
     18.times do |i|
       bar = i+1
-      cymbal1 = (bar>4 && (bar%2 >0))
-      cymbal2 = (bar==10 || bar==14 || bar ==18)
-      play_dpA(bar%4 == 0 && bar != 16, cymbal1, cymbal2) # one more kick for every 4th bar except for the 16th
+      play_dkpA(bar%4 == 0 && bar != 16) # one more kick for every 4th bar except for the 16th
     end
     use_bpm bpm_fast
     gogo_kick
-    gogo_cymbal
     sleep 14 # 22
     
     ### B ###
@@ -102,36 +111,57 @@ with_fx :reverb, room: 0.4, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
   end
 end
 
-##| with_fx :reverb, room: 0.4, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
-##|   live_loop :drum_tom_hi_hard do
-##|     ### A ###
-##|     18.times do
-##|       sleep 1
-##|       gogo_snare
-##|       sleep 0.75
-##|       sleep 0.25
-##|       sleep 0.25
-##|       sleep 0.5
-##|       gogo_snare
-##|       sleep 0.25
-##|       sleep 1
-##|     end
-##|     use_bpm bpm_fast
-##|     sleep 14 #22
+with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+  live_loop :drum_snare do
+    control r, amp: amp_factor_mp*amp_master*amp_snare
+    ### A ###
+    18.times do |i|
+      bar = i+1
+      play_dspA
+    end
+    use_bpm bpm_fast
+    gogo_kick
+    sleep 14 # 22
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
+    ### E ###
+    sleep 32
+    ### F-G ###
+    sleep 64
+  end
+end
 
-##|     ### B ###
-##|     sleep 96
-##|     ### C ###
-##|     sleep 31.5
-##|     ### D ###
-##|     sleep 64
-##|     ### E ###
-##|     sleep 32
-##|     ### F-G ###
-##|     sleep 64
-##|   end
-##| end
-
+with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+  live_loop :drum_cymbals do
+    control r, amp: amp_factor_mp*amp_master*amp_hats
+    ### A ###
+    18.times do |i|
+      bar = i+1
+      cymbal1 = (bar>4 && bar%2 >0)
+      cymbal2 = (bar==10 || bar==14 || bar ==18)
+      play_dcpA(cymbal1, cymbal2)
+    end
+    use_bpm bpm_fast
+    gogo_cymbal
+    sleep 14 # 22
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
+    ### E ###
+    sleep 32
+    ### F-G ###
+    sleep 64
+  end
+end
 
 # bass pattern functions
 define :play_bpA do
@@ -271,9 +301,10 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
 end
 
 
-with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_left, mix: 0.7 do
+with_fx :reverb, room: 0.8, mix: 0.7 do |r|
   live_loop :piano_left do
     use_synth :piano
+    control r, amp: amp_factor_mp*amp_master*amp_piano_left
     ### A ###
     sleep 16
     4.times do |i|
@@ -307,8 +338,9 @@ end
 # right hand pattern blocks
 rh_pattern = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
 
-with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 0.6 do
+with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   live_loop :piano_right do
+    control r, amp: amp_factor_mp*amp_master*amp_piano_right
     use_synth :piano
     ### A ###
     sleep 48
