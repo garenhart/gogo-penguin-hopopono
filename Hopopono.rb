@@ -42,34 +42,51 @@ define :gogo_snare do
   sample :drum_snare_soft, rpitch: 6
 end
 
+define :gogo_cymbal do
+  sample :drum_cymbal_closed
+end
+
+
+# drum pattern functions
+
+define :play_dpA do |extra_kick, cymbal1, cymbal2|
+  gogo_kick
+  gogo_cymbal if (cymbal1 || cymbal2)
+  sleep 1
+  gogo_snare
+  sleep 0.75
+  gogo_kick
+  gogo_cymbal if cymbal2
+  sleep 0.25
+  sleep 0.25
+  gogo_kick
+  sleep 0.5
+  gogo_snare
+  sleep 0.25
+  if (extra_kick) # one more kick
+    sleep 0.25
+    gogo_kick
+    sleep 0.25
+    sleep 0.5
+  else
+    sleep 1
+  end
+end
+
 use_bpm bpm_slow
 
-with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
-  live_loop :drum_kick do
+with_fx :reverb, room: 0.4, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
+  live_loop :drum do
     ### A ###
     18.times do |i|
       bar = i+1
-      puts "bar %d" %bar
-      gogo_kick
-      sleep 1
-      sleep 0.75
-      gogo_kick
-      sleep 0.25
-      sleep 0.25
-      gogo_kick
-      sleep 0.5
-      sleep 0.25
-      if (bar%4 == 0 && bar != 16) # one more kick for every 4th bar except for the 16th
-        sleep 0.25
-        gogo_kick
-        sleep 0.25
-        sleep 0.5
-      else
-        sleep 1
-      end
+      cymbal1 = (bar>4 && (bar%2 >0))
+      cymbal2 = (bar==10 || bar==14 || bar ==18)
+      play_dpA(bar%4 == 0 && bar != 16, cymbal1, cymbal2) # one more kick for every 4th bar except for the 16th
     end
     use_bpm bpm_fast
     gogo_kick
+    gogo_cymbal
     sleep 14 # 22
     
     ### B ###
@@ -85,35 +102,35 @@ with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_kick, mix: 0.5 do
   end
 end
 
-with_fx :reverb, room: 0.6, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
-  live_loop :drum_snare do
-    ### A ###
-    18.times do
-      sleep 1
-      gogo_snare
-      sleep 0.75
-      sleep 0.25
-      sleep 0.25
-      sleep 0.5
-      gogo_snare
-      sleep 0.25
-      sleep 1
-    end
-    use_bpm bpm_fast
-    sleep 14 #22
-    
-    ### B ###
-    sleep 96
-    ### C ###
-    sleep 31.5
-    ### D ###
-    sleep 64
-    ### E ###
-    sleep 32
-    ### F-G ###
-    sleep 64
-  end
-end
+##| with_fx :reverb, room: 0.4, amp: amp_factor_mp*amp_master*amp_snare, mix: 0.5 do
+##|   live_loop :drum_tom_hi_hard do
+##|     ### A ###
+##|     18.times do
+##|       sleep 1
+##|       gogo_snare
+##|       sleep 0.75
+##|       sleep 0.25
+##|       sleep 0.25
+##|       sleep 0.5
+##|       gogo_snare
+##|       sleep 0.25
+##|       sleep 1
+##|     end
+##|     use_bpm bpm_fast
+##|     sleep 14 #22
+
+##|     ### B ###
+##|     sleep 96
+##|     ### C ###
+##|     sleep 31.5
+##|     ### D ###
+##|     sleep 64
+##|     ### E ###
+##|     sleep 32
+##|     ### F-G ###
+##|     sleep 64
+##|   end
+##| end
 
 
 # bass pattern functions
