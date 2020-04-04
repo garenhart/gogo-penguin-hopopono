@@ -28,6 +28,13 @@ amp_factor_mp = 0.75
 amp_factor_mf = 1.25
 amp_factor_f = 1.5
 
+d_kick = 1
+d_snare = 2
+d_hat = 3
+
+##| d_kick_snare = 3
+##| d_kh = 5
+##| d_sh = 6
 
 gogo_chord1 = [:G2, :D3, :B3]
 gogo_chord2 = [:A2, :E3, :C4]
@@ -46,35 +53,39 @@ define :gogo_cymbal do
   sample :drum_cymbal_closed
 end
 
-
 # drum pattern functions
 
+define :play_drum_pattern do |init_rest, d_comp, rests|
+  count = rests.length
+  puts count
+  sleep init_rest
+  count.times do |i|
+    gogo_kick if d_comp == d_kick
+    gogo_snare if d_comp == d_snare
+    gogo_cymbal if d_comp == d_hat
+    puts rests[i]
+    sleep rests[i]
+  end
+end
+
+### A ###
 define :play_dkpA do |extra_kick|
   gogo_kick
-  sleep 1
-  sleep 0.75
-  gogo_kick
-  sleep 0.25
-  sleep 0.25
+  sleep 1.75
   gogo_kick
   sleep 0.5
-  sleep 0.25
+  gogo_kick
+  sleep 1
   if (extra_kick) # one more kick
-    sleep 0.25
     gogo_kick
-    sleep 0.25
-    sleep 0.5
+    sleep 0.75
   else
-    sleep 1
+    sleep 0.75
   end
 end
 
 define :play_dspA do
-  sleep 1
-  gogo_snare
-  sleep 1.75
-  gogo_snare
-  sleep 1.25
+  play_drum_pattern(1, d_snare, [1.75, 1.25])
 end
 
 define :play_dcpA do |cymbal1, cymbal2|
@@ -83,6 +94,8 @@ define :play_dcpA do |cymbal1, cymbal2|
   gogo_cymbal if cymbal2
   sleep 2.25
 end
+
+### B ###
 
 use_bpm bpm_slow
 
@@ -120,7 +133,6 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
       play_dspA
     end
     use_bpm bpm_fast
-    gogo_kick
     sleep 14 # 22
     
     ### B ###
