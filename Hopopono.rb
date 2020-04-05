@@ -18,7 +18,7 @@ bpm_fast = 106
 amp_master = 1
 amp_kick = 0.5
 amp_snare = 0.6
-amp_hats = 0.5
+amp_cymbals = 0.5
 amp_bass = 0.3
 amp_piano_left = 0.6
 amp_piano_right = 0.6
@@ -30,7 +30,7 @@ amp_factor_f = 1.5
 
 d_kick = 1
 d_snare = 2
-d_hat = 3
+d_cymbal = 3
 
 ##| d_kick_snare = 3
 ##| d_kh = 5
@@ -62,7 +62,7 @@ define :play_drum_pattern do |init_rest, d_comp, rests|
   count.times do |i|
     gogo_kick if d_comp == d_kick
     gogo_snare if d_comp == d_snare
-    gogo_cymbal if d_comp == d_hat
+    gogo_cymbal if d_comp == d_cymbal
     puts rests[i]
     sleep rests[i]
   end
@@ -76,12 +76,8 @@ define :play_dkpA do |extra_kick|
   sleep 0.5
   gogo_kick
   sleep 1
-  if (extra_kick) # one more kick
-    gogo_kick
-    sleep 0.75
-  else
-    sleep 0.75
-  end
+  gogo_kick if (extra_kick) # one more kick
+  sleep 0.75
 end
 
 define :play_dspA do
@@ -96,6 +92,31 @@ define :play_dcpA do |cymbal1, cymbal2|
 end
 
 ### B ###
+define :play_dkpB1 do
+  play_drum_pattern(0, d_kick, [0.5, 1, 0.25, 0.5, 1.75])
+end
+
+define :play_dspB1 do
+  play_drum_pattern(1, d_snare, [0.5, 0.5, 0.75, 0.5, 0.25, 0.125, 0.125, 0.125, 0.125])
+end
+
+define :play_dcpB1 do
+  play_drum_pattern(0, d_cymbal, [0.5, 0.5, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
+end
+
+
+define :play_dkpB2 do
+  play_drum_pattern(0, d_kick, [0.5, 1.25, 0.5, 1.75])
+end
+
+define :play_dspB2 do
+  play_drum_pattern(0.25, d_snare, [0.75, 0.5, 0.5, 0.75, 0.5, 0.25, 0.25, 0.25])
+end
+
+define :play_dcpB2 do
+  play_drum_pattern(0, d_cymbal, [0.5, 0.125, 0.125, 0.25, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
+end
+
 
 use_bpm bpm_slow
 
@@ -111,8 +132,13 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     gogo_kick
     sleep 14 # 22
     
+    control r, amp: amp_factor_mf*amp_master*amp_kick
     ### B ###
-    sleep 96
+    play_dkpB1
+    23.times do
+      play_dkpB2
+    end
+    
     ### C ###
     sleep 31.5
     ### D ###
@@ -135,8 +161,12 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     use_bpm bpm_fast
     sleep 14 # 22
     
+    control r, amp: amp_factor_mf*amp_master*amp_snare
     ### B ###
-    sleep 96
+    play_dspB1
+    23.times do
+      play_dspB2
+    end
     ### C ###
     sleep 31.5
     ### D ###
@@ -150,7 +180,7 @@ end
 
 with_fx :reverb, room: 0.4, mix: 0.5 do |r|
   live_loop :drum_cymbals do
-    control r, amp: amp_factor_mp*amp_master*amp_hats
+    control r, amp: amp_factor_mp*amp_master*amp_cymbals
     ### A ###
     18.times do |i|
       bar = i+1
@@ -162,8 +192,12 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     gogo_cymbal
     sleep 14 # 22
     
+    control r, amp: amp_factor_mf*amp_master*amp_cymbals
     ### B ###
-    sleep 96
+    play_dcpB1
+    23.times do
+      play_dcpB2
+    end
     ### C ###
     sleep 31.5
     ### D ###
