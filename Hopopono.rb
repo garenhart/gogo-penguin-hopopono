@@ -18,7 +18,7 @@ bpm_fast = 106
 amp_master = 1
 amp_kick = 0.5
 amp_snare = 0.6
-amp_cymbals = 0.5
+amp_hh = 0.5
 amp_bass = 0.3
 amp_piano_left = 0.6
 amp_piano_right = 0.6
@@ -30,7 +30,7 @@ amp_factor_f = 1.5
 
 d_kick = 1
 d_snare = 2
-d_cymbal = 3
+d_hh = 3
 
 ##| d_kick_snare = 3
 ##| d_kh = 5
@@ -49,7 +49,7 @@ define :gogo_snare do
   sample :drum_snare_soft, rpitch: 6
 end
 
-define :gogo_cymbal do
+define :gogo_hh do
   sample :drum_cymbal_closed
 end
 
@@ -62,7 +62,7 @@ define :play_drum_pattern do |init_rest, d_comp, rests|
   count.times do |i|
     gogo_kick if d_comp == d_kick
     gogo_snare if d_comp == d_snare
-    gogo_cymbal if d_comp == d_cymbal
+    gogo_hh if d_comp == d_hh
     puts rests[i]
     sleep rests[i]
   end
@@ -84,10 +84,10 @@ define :play_dspA do
   play_drum_pattern(1, d_snare, [1.75, 1.25])
 end
 
-define :play_dcpA do |cymbal1, cymbal2|
-  gogo_cymbal if (cymbal1 || cymbal2)
+define :play_dcpA do |hh1, hh2|
+  gogo_hh if (hh1 || hh2)
   sleep 1.75
-  gogo_cymbal if cymbal2
+  gogo_hh if hh2
   sleep 2.25
 end
 
@@ -101,7 +101,7 @@ define :play_dspB1 do
 end
 
 define :play_dcpB1 do
-  play_drum_pattern(0, d_cymbal, [0.5, 0.5, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
+  play_drum_pattern(0, d_hh, [0.5, 0.5, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
 end
 
 
@@ -114,7 +114,7 @@ define :play_dspB2 do
 end
 
 define :play_dcpB2 do
-  play_drum_pattern(0, d_cymbal, [0.5, 0.125, 0.125, 0.25, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
+  play_drum_pattern(0, d_hh, [0.5, 0.125, 0.125, 0.25, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
 end
 
 
@@ -179,20 +179,20 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
 end
 
 with_fx :reverb, room: 0.4, mix: 0.5 do |r|
-  live_loop :drum_cymbals do
-    control r, amp: amp_factor_mp*amp_master*amp_cymbals
+  live_loop :drum_hh do
+    control r, amp: amp_factor_mp*amp_master*amp_hh
     ### A ###
     18.times do |i|
       bar = i+1
-      cymbal1 = (bar>4 && bar%2 >0)
-      cymbal2 = (bar==10 || bar==14 || bar ==18)
-      play_dcpA(cymbal1, cymbal2)
+      hh1 = (bar>4 && bar%2 >0)
+      hh2 = (bar==10 || bar==14 || bar ==18)
+      play_dcpA(hh1, hh2)
     end
     use_bpm bpm_fast
-    gogo_cymbal
+    gogo_hh
     sleep 14 # 22
     
-    control r, amp: amp_factor_mf*amp_master*amp_cymbals
+    control r, amp: amp_factor_mf*amp_master*amp_hh
     ### B ###
     play_dcpB1
     23.times do
