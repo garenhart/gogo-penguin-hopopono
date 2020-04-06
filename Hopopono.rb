@@ -142,6 +142,28 @@ define :play_dcpB2 do |randomize|
   end
 end
 
+### F ###
+
+define :play_dspF1 do
+  play_drum_pattern(0.25, d_snare, [0.75, 1.75, 0.75, 0.25, 0.25])
+end
+
+define :play_dspF2 do
+  play_drum_pattern(1, d_snare, [1.75, 0.75, 0.25, 0.25])
+end
+
+define :play_dcpF1 do
+  play_drum_pattern(0, d_snare, [0.75, 0.75, 1, 0.75, 0.75])
+end
+
+define :play_dcpF2 do
+  play_drum_pattern(0, d_snare, [0.5, 0.25, 0.5])
+  11.times do
+    gogo_hh
+    sleep 0.25
+  end
+end
+
 
 use_bpm bpm_slow
 
@@ -172,11 +194,30 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     end
     
     ### D ###
-    sleep 64
+    16.times do
+      play_dkpB2(true)
+    end
+    
     ### E ###
-    sleep 32
-    ### F-G ###
-    sleep 64
+    8.times do
+      play_dkpB2(false)
+    end
+    
+    ### F ###
+    4.times do
+      play_dkpB2(false)
+    end
+    4.times do
+      play_dkpA(false)
+    end
+    
+    use_bpm bpm_slow
+    ### G ###
+    6.times do
+      play_dkpA(false)
+    end
+    gogo_kick
+    sleep 8
   end
 end
 
@@ -206,11 +247,31 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     end
     
     ### D ###
-    sleep 64
+    16.times do
+      play_dspB2(true)
+    end
+    
     ### E ###
-    sleep 32
-    ### F-G ###
-    sleep 64
+    8.times do
+      play_dspB2(false)
+    end
+    
+    ### F ###
+    4.times do
+      play_dspB2(false)
+    end
+    play_dspF1
+    play_dspF2
+    2.times do
+      play_dspA
+    end
+    
+    use_bpm bpm_slow
+    ### G ###
+    6.times do
+      play_dspA
+    end
+    sleep 8
   end
 end
 
@@ -242,11 +303,40 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     end
     
     ### D ###
-    sleep 64
+    16.times do
+      play_dcpB2(true)
+    end
+    
     ### E ###
-    sleep 32
-    ### F-G ###
-    sleep 64
+    8.times do
+      play_dcpB2(false)
+    end
+    
+    ### F ###
+    4.times do
+      play_dcpB2(false)
+    end
+    play_dcpF1
+    play_dcpF2
+    gogo_hh
+    sleep 0.5
+    4.times do
+      gogo_hh
+      sleep 0.125
+    end
+    sleep 3
+    sleep 4
+    
+    use_bpm bpm_slow
+    ### G ###
+    6.times do |i|
+      bar = i+1
+      hh1 = (bar != 4)
+      hh2 = (bar==2 || bar==6)
+      play_dcpA(hh1, hh2)
+    end
+    gogo_hh
+    sleep 8
   end
 end
 
@@ -378,6 +468,7 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
     play_bpA
     sleep 8
     
+    use_bpm bpm_slow
     control r, amp: amp_factor_mp*amp_master*amp_bass
     ### G ###
     2.times do
@@ -417,8 +508,12 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     sleep 64
     ### E ###
     sleep 32
-    ### F-G ###
-    sleep 64
+    ### F ###
+    sleep 32
+    
+    use_bpm bpm_slow
+    ### G ###
+    sleep 32
   end
 end
 
@@ -458,8 +553,12 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 64
     ### E ###
     sleep 32
-    ### F-G ###
-    sleep 64
+    ### F ###
+    sleep 32
+    
+    use_bpm bpm_slow
+    ### G ###
+    sleep 32
   end
 end
 
