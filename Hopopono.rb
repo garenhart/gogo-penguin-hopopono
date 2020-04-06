@@ -31,6 +31,8 @@ amp_factor_f = 1.5
 d_kick = 1
 d_snare = 2
 d_hh = 3
+d_hh_open = 4
+d_hh_pedal = 5
 
 ##| d_kick_snare = 3
 ##| d_kh = 5
@@ -50,7 +52,15 @@ define :gogo_snare do
 end
 
 define :gogo_hh do
-  sample :drum_cymbal_closed
+  sample :drum_cymbal_closed, amp: amp_factor_mp*amp_master*amp_hh
+end
+
+define :gogo_hh_open do
+  sample :drum_cymbal_open, amp: amp_factor_mp*amp_master*amp_hh
+end
+
+define :gogo_hh_pedal do
+  sample :drum_cymbal_pedal
 end
 
 # drum pattern functions
@@ -63,6 +73,8 @@ define :play_drum_pattern do |init_rest, d_comp, rests|
     gogo_kick if d_comp == d_kick
     gogo_snare if d_comp == d_snare
     gogo_hh if d_comp == d_hh
+    gogo_hh_open if d_comp == d_hh_open
+    gogo_hh_pedal if d_comp == d_hh_pedal
     puts rests[i]
     sleep rests[i]
   end
@@ -105,16 +117,29 @@ define :play_dcpB1 do
 end
 
 
-define :play_dkpB2 do
+define :play_dkpB2 do |randomize|
   play_drum_pattern(0, d_kick, [0.5, 1.25, 0.5, 1.75])
 end
 
-define :play_dspB2 do
+define :play_dspB2 do |randomize|
   play_drum_pattern(0.25, d_snare, [0.75, 0.5, 0.5, 0.75, 0.5, 0.25, 0.25, 0.25])
 end
 
-define :play_dcpB2 do
-  play_drum_pattern(0, d_hh, [0.5, 0.125, 0.125, 0.25, 0.25, 0.5, 0.25, 0.25, 0.25, 0.5, 0.5, 0.5])
+define :play_dcpB2 do |randomize|
+  play_drum_pattern(0, d_hh, [0.5, 0.125, 0.125, 0.5, 0.5])
+  if randomize && one_in(4)
+    play_drum_pattern(0, d_hh_open, [0.5])
+  else
+    play_drum_pattern(0, d_hh, [0.5])
+  end
+  
+  play_drum_pattern(0, d_hh, [0.25, 0.5, 0.5])
+  
+  if randomize && one_in(4)
+    play_drum_pattern(0, d_hh_open, [0.5])
+  else
+    play_drum_pattern(0, d_hh, [0.5])
+  end
 end
 
 
@@ -136,11 +161,16 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     ### B ###
     play_dkpB1
     23.times do
-      play_dkpB2
+      play_dkpB2(true)
     end
     
     ### C ###
-    sleep 31.5
+    play_dkpB2(false)
+    play_drum_pattern(0, d_kick, [0.5, 1.25, 0.5, 1.25]) # bar 48 (7/8)
+    6.times do
+      play_dkpB2(false)
+    end
+    
     ### D ###
     sleep 64
     ### E ###
@@ -165,10 +195,16 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     ### B ###
     play_dspB1
     23.times do
-      play_dspB2
+      play_dspB2(true)
     end
+    
     ### C ###
-    sleep 31.5
+    play_dspB2(false)
+    play_drum_pattern(0.25, d_snare, [0.75, 0.5, 0.5, 0.75, 0.5, 0.25]) # bar 48 (7/8)
+    6.times do
+      play_dspB2(false)
+    end
+    
     ### D ###
     sleep 64
     ### E ###
@@ -192,14 +228,19 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     gogo_hh
     sleep 14 # 22
     
-    control r, amp: amp_factor_mf*amp_master*amp_hh
+    # control r, amp: amp_factor_mp*amp_master*amp_hh
     ### B ###
     play_dcpB1
     23.times do
-      play_dcpB2
+      play_dcpB2(true)
     end
     ### C ###
-    sleep 31.5
+    play_dcpB2(false)
+    play_drum_pattern(0, d_hh, [0.5, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25]) # bar 48 (7/8)
+    6.times do
+      play_dcpB2(false)
+    end
+    
     ### D ###
     sleep 64
     ### E ###
