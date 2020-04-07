@@ -20,12 +20,13 @@ amp_kick = 0.5
 amp_snare = 0.6
 amp_hh = 0.5
 amp_bass = 0.3
-amp_piano_left = 0.6
-amp_piano_right = 0.6
+amp_piano_left = 0.5
+amp_piano_right = 0.5
+amp_piano_right_sup = 0.7
 
 amp_factor_p = 0.5
-amp_factor_mp = 0.75
-amp_factor_mf = 1.25
+amp_factor_mp = 0.8
+amp_factor_mf = 1.2
 amp_factor_f = 1.5
 
 d_kick = 1
@@ -500,6 +501,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     end
     sleep 6
     
+    control r, amp: amp_factor_mf*amp_master*amp_piano_left
     ### B ###
     sleep 96
     ### C ###
@@ -522,8 +524,8 @@ rh_pattern = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
 
 with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   live_loop :piano_right do
-    control r, amp: amp_factor_mp*amp_master*amp_piano_right
     use_synth :piano
+    control r, amp: amp_factor_mp*amp_master*amp_piano_right
     ### A ###
     sleep 48
     sleep 24
@@ -532,8 +534,19 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
       play_pattern_timed rh_pattern.tick, [0.25]
     end
     
+    control r, amp: amp_factor_mf*amp_master*amp_piano_right
     ### B ###
-    sleep 96
+    tick_reset # reset tick to start from the initial pattern
+    32.times do
+      play_pattern_timed rh_pattern.tick, [0.25]
+    end
+    8.times do
+      tick_reset
+      8.times do
+        play_pattern_timed rh_pattern.tick, [0.25]
+      end
+    end
+    
     ### C ###
     sleep 31.5
     ### D ###
@@ -550,9 +563,10 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
 end
 
 # supplemental loop for the right hand to simplify the main loop which can mostly tick through
-with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 0.6 do
+with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   live_loop :piano_right_supplement do
     use_synth :piano
+    control r, amp: amp_factor_mp*amp_master*amp_piano_right_sup
     ### A ###
     sleep 48
     
@@ -569,8 +583,20 @@ with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 
     end
     sleep 6
     
+    control r, amp: amp_factor_mf*amp_master*amp_piano_right_sup
     ### B ###
-    sleep 96
+    sleep 32
+    4.times do
+      play :a5, sustain: 4
+      sleep 4
+      play :d6, sustain: 1.75
+      sleep 1.75
+      play :c6, sustain: 2.25
+      sleep 2.25
+      play :b5, sustain: 8
+      sleep 8
+    end
+    
     ### C ###
     sleep 31.5
     ### D ###
