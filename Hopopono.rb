@@ -526,6 +526,36 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     use_synth :piano
     ### A ###
     sleep 48
+    sleep 24
+    use_bpm bpm_fast
+    14.times do
+      play_pattern_timed rh_pattern.tick, [0.25]
+    end
+    
+    ### B ###
+    sleep 96
+    ### C ###
+    sleep 31.5
+    ### D ###
+    sleep 64
+    ### E ###
+    sleep 32
+    ### F ###
+    sleep 32
+    
+    use_bpm bpm_slow
+    ### G ###
+    sleep 32
+  end
+end
+
+# supplemental loop for the right hand to simplify the main loop which can mostly tick through
+with_fx :reverb, room: 0.8, amp: amp_factor_mp*amp_master*amp_piano_right, mix: 0.6 do
+  live_loop :piano_right_supplement do
+    use_synth :piano
+    ### A ###
+    sleep 48
+    
     2.times do |i|
       play :A5, sustain: 4
       sleep 4
@@ -534,16 +564,10 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
       play :C6, sustain: 2.25
       sleep 2.25
       play :B5, sustain: 8
-      puts "loop %d" %i
-      if (i==0)
-        sleep 8
-      else # end of second time
-        use_bpm bpm_fast
-        14.times do
-          play_pattern_timed rh_pattern.tick, [0.25]
-        end
-      end
+      use_bpm bpm_fast if i==1
+      sleep 8
     end
+    sleep 6
     
     ### B ###
     sleep 96
