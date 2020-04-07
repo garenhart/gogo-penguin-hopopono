@@ -520,7 +520,8 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
 end
 
 # right hand pattern blocks
-rh_pattern = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
+rh_pattern1 = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
+rh_pattern2 = [[:a4, :a4, :c5, :a4], [:e5, :f5, :a4, :f5], [:d5, :a4, :a4, :d5]]
 
 with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   live_loop :piano_right do
@@ -531,24 +532,41 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 24
     use_bpm bpm_fast
     14.times do
-      play_pattern_timed rh_pattern.tick, [0.25]
+      play_pattern_timed rh_pattern1.tick, [0.25]
     end
     
     control r, amp: amp_factor_mf*amp_master*amp_piano_right
     ### B ###
     tick_reset # reset tick to start from the initial pattern
     32.times do
-      play_pattern_timed rh_pattern.tick, [0.25]
+      play_pattern_timed rh_pattern1.tick, [0.25]
     end
     8.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern.tick, [0.25]
+        play_pattern_timed rh_pattern1.tick, [0.25]
       end
     end
     
     ### C ###
-    sleep 31.5
+    tick_reset
+    7.times do
+      play_pattern_timed rh_pattern2.tick, [0.25]
+    end
+    # play partial set to complete the bar 48 (7/8)
+    play :e5
+    sleep 0.25
+    play :f5
+    sleep 0.25
+    
+    3.times do
+      tick_reset
+      8.times do
+        play_pattern_timed rh_pattern2.tick, [0.25]
+      end
+    end
+    
+    
     ### D ###
     sleep 64
     ### E ###
@@ -598,7 +616,28 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     end
     
     ### C ###
-    sleep 31.5
+    play :a5, sustain: 4
+    sleep 4
+    # play the bar 48 (7/8)
+    play :b5, sustain: 1.75
+    sleep 1.75
+    play :a5, sustain: 1.75
+    sleep 1.75
+    
+    sleep 0.5
+    play :g5, sustain: 3.5
+    sleep 3.5
+    sleep 4
+    
+    play :a5, sustain: 4
+    sleep 4
+    play :b5, sustain: 1.75
+    sleep 1.75
+    play :g5, sustain: 2.25
+    sleep 2.25
+    play :a5, sustain: 8
+    sleep 8
+    
     ### D ###
     sleep 64
     ### E ###
@@ -611,6 +650,3 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 32
   end
 end
-
-
-
