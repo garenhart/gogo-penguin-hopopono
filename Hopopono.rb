@@ -566,9 +566,14 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
       end
     end
     
-    
     ### D ###
-    sleep 64
+    8.times do
+      tick_reset
+      8.times do
+        play_pattern_timed rh_pattern1.tick, [0.25]
+      end
+    end
+    
     ### E ###
     sleep 32
     ### F ###
@@ -580,6 +585,28 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   end
 end
 
+define :play_supplement_pattern1 do
+  play :a5, sustain: 4
+  sleep 4
+  play :d6, sustain: 1.75
+  sleep 1.75
+  play :c6, sustain: 2.25
+  sleep 2.25
+  play :b5, sustain: 8
+  sleep 8
+end
+
+define :play_supplement_pattern2 do
+  play :a5, sustain: 4
+  sleep 4
+  play :b5, sustain: 1.75
+  sleep 1.75
+  play :g5, sustain: 2.25
+  sleep 2.25
+  play :a5, sustain: 8
+  sleep 8
+end
+
 # supplemental loop for the right hand to simplify the main loop which can mostly tick through
 with_fx :reverb, room: 0.8, mix: 0.6 do |r|
   live_loop :piano_right_supplement do
@@ -589,13 +616,13 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 48
     
     2.times do |i|
-      play :A5, sustain: 4
+      play :a5, sustain: 4
       sleep 4
-      play :D6, sustain: 1.75
+      play :d6, sustain: 1.75
       sleep 1.75
-      play :C6, sustain: 2.25
+      play :c6, sustain: 2.25
       sleep 2.25
-      play :B5, sustain: 8
+      play :b5, sustain: 8
       use_bpm bpm_fast if i==1
       sleep 8
     end
@@ -605,14 +632,7 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     ### B ###
     sleep 32
     4.times do
-      play :a5, sustain: 4
-      sleep 4
-      play :d6, sustain: 1.75
-      sleep 1.75
-      play :c6, sustain: 2.25
-      sleep 2.25
-      play :b5, sustain: 8
-      sleep 8
+      play_supplement_pattern1
     end
     
     ### C ###
@@ -629,17 +649,13 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 3.5
     sleep 4
     
-    play :a5, sustain: 4
-    sleep 4
-    play :b5, sustain: 1.75
-    sleep 1.75
-    play :g5, sustain: 2.25
-    sleep 2.25
-    play :a5, sustain: 8
-    sleep 8
+    play_supplement_pattern2
     
     ### D ###
-    sleep 64
+    4.times do
+      play_supplement_pattern1
+    end
+    
     ### E ###
     sleep 32
     ### F ###
