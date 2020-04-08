@@ -391,11 +391,11 @@ define :play_bpD2 do |base, d1, d2, d3|
 end
 
 define :play_bpD4 do |base, pause, partial|
-  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 2.75-pause], release: 0.5
+  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 2.75-pause], release: 0.25
   if partial
     sleep pause
   else
-    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
+    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.25
   end
 end
 
@@ -438,6 +438,7 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
       end
     end
     
+    control r, amp: amp_master*amp_bass_switch*amp_bass
     ### C ###
     play_bpB1(:bb3)
     play_pattern_timed [:g3, :g3, :r, :f3, :f3, :r], [0.5, 0.5, 0.75, 0.5, 0.5, 0.75], release: 0.5 # bar 48 (7/8)
@@ -452,12 +453,14 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
     control r, amp: amp_factor_f*amp_master*amp_bass_switch*amp_bass
     ### D ###
     4.times do |i|
+      control r, amp: amp_factor_mf*amp_master*amp_bass_switch*amp_bass if i==2
       play_bpD1(:g2, false)
       play_bpD2(:a2, 7, 2, -5)
       play_bpD1(:c3, true)
       play_bpD4(:c3, 1, i==3) # the last one is a partial pattern
     end
     
+    control r, amp: amp_factor_f*amp_master*amp_bass_switch*amp_bass
     ### E ###
     play_bpD1(:bb2, true)
     play_bpD2(:g2, 10, 5, -2)
@@ -469,6 +472,7 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
     play_bpD1(:f3, true)
     play_bpD4(:f3, 1, true)
     
+    control r, amp: amp_factor_mf*amp_master*amp_bass_switch*amp_bass
     ### F ###
     play_bpD1(:g2, false)
     play_bpD2(:a2, 7, 2, -5)
@@ -493,11 +497,24 @@ end
 #       #
 #########
 
-gogo_chord1 = [:G2, :D3, :B3]
-gogo_chord2 = [:A2, :E3, :C4]
-gogo_chord3 = [:E2, :B2, :G3]
-gogo_chord4 = [:C2, :G2, :E3]
+gogo_chordA1 = [:G2, :D3, :B3]
+gogo_chordA2 = [:A2, :E3, :C4]
+gogo_chordA3 = [:E2, :B2, :G3]
+gogo_chordA4 = [:C2, :G2, :E3]
 
+define :play_progressionA do |change_bmp|
+  play_chord gogo_chordA1, sustain: 3
+  sleep 4
+  play_chord gogo_chordA2, sustain: 0.75
+  sleep 1.75
+  play_chord gogo_chordA3, sustain: 1.25
+  sleep 2.25
+  play_chord gogo_chordA4, sustain: 12
+  
+  use_bpm bpm_fast if change_bmp
+  
+  sleep 8
+end
 
 with_fx :reverb, room: 0.8, mix: 0.7 do |r|
   live_loop :piano_left do
@@ -506,23 +523,16 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     ### A ###
     sleep 16
     4.times do |i|
-      play_chord gogo_chord1, sustain: 3
-      sleep 4
-      play_chord gogo_chord2, sustain: 0.75
-      sleep 1.75
-      play_chord gogo_chord3, sustain: 1.25
-      sleep 2.25
-      play_chord gogo_chord4, sustain: 7
-      if (i == 3)
-        use_bpm bpm_fast
-      end
-      sleep 8
+      play_progressionA(i==3)
     end
     sleep 6
     
     control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_left
     ### B ###
-    sleep 96
+    6.times do
+      play_progressionA(false)
+    end
+    
     ### C ###
     sleep 31.5
     ### D ###
@@ -532,6 +542,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     ### F ###
     sleep 32
     
+    control r, amp: amp_factor_mp*amp_master*amp_piano_switch*amp_piano_left
     use_bpm bpm_slow
     ### G ###
     sleep 32
@@ -609,6 +620,7 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
       end
     end
     
+    control r, amp: amp_factor_mp*amp_master*amp_piano_switch*amp_piano_right
     use_bpm bpm_slow
     ### G ###
     sleep 32
@@ -707,6 +719,7 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
       play_supplement_pattern1
     end
     
+    control r, amp: amp_factor_mp*amp_master*amp_piano_switch*amp_piano_right_sup
     use_bpm bpm_slow
     ### G ###
     2.times do
