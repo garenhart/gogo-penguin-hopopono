@@ -40,14 +40,11 @@ d_hh = 3
 d_hh_open = 4
 d_hh_pedal = 5
 
-##| d_kick_snare = 3
-##| d_kh = 5
-##| d_sh = 6
-
-gogo_chord1 = [:G2, :D3, :B3]
-gogo_chord2 = [:A2, :E3, :C4]
-gogo_chord3 = [:E2, :B2, :G3]
-gogo_chord4 = [:C2, :G2, :E3]
+#########
+#       #
+# DRUMS #
+#       #
+#########
 
 define :gogo_kick do
   node_kick = sample :bd_tek
@@ -346,6 +343,12 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
   end
 end
 
+########
+#      #
+# BASS #
+#      #
+########
+
 # bass pattern functions
 define :play_bpA do
   play :G3, release: 4
@@ -484,6 +487,17 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
   end
 end
 
+#########
+#       #
+# PIANO #
+#       #
+#########
+
+gogo_chord1 = [:G2, :D3, :B3]
+gogo_chord2 = [:A2, :E3, :C4]
+gogo_chord3 = [:E2, :B2, :G3]
+gogo_chord4 = [:C2, :G2, :E3]
+
 
 with_fx :reverb, room: 0.8, mix: 0.7 do |r|
   live_loop :piano_left do
@@ -588,7 +602,12 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     end
     
     ### F ###
-    sleep 32
+    4.times do
+      tick_reset
+      8.times do
+        play_pattern_timed rh_pattern1.tick, [0.25]
+      end
+    end
     
     use_bpm bpm_slow
     ### G ###
@@ -682,11 +701,16 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     ### E ###
     play_supplement_pattern3
     play_supplement_pattern2
+    
     ### F ###
-    sleep 32
+    2.times do
+      play_supplement_pattern1
+    end
     
     use_bpm bpm_slow
     ### G ###
-    sleep 32
+    2.times do
+      play_supplement_pattern1
+    end
   end
 end
