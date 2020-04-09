@@ -495,21 +495,25 @@ chordA1 = [:g2, :d3, :b3]
 chordA2 = [:a2, :e3, :c4]
 chordA3 = [:e2, :b2, :g3]
 chordA4 = [:c2, :g2, :e3]
+chordA4_last = [:c1, :c2]
 
 chordC1 = [:bb2, :f3, :c4, :d4]
 chordC2 = [:g2, :d3, :bb3]
 chordC3 = [:f2, :c3, :a3]
-chordC3_alt = [:eb2, :bb2, :g3]
 chordC4 = [:eb2, :bb2, :g3]
 
-define :play_progression_A do |change_bmp|
+define :play_progression_A do |change_bmp, last|
   play_chord chordA1, sustain: 3
   sleep 4
   play_chord chordA2, sustain: 0.75
   sleep 1.75
   play_chord chordA3, sustain: 1.25
   sleep 2.25
-  play_chord chordA4, sustain: 12
+  if last
+    play_chord chordA4_last, sustain: 12
+  else
+    play_chord chordA4, sustain: 8
+  end
   
   use_bpm bpm_fast if change_bmp
   
@@ -523,7 +527,7 @@ define :play_progression_C do |short, alt|
   sleep 1.75
  
   if alt
-    play_chord chordC3_alt, sustain: 1.75
+    play_chord chordC4, sustain: 1.75
   else
     play_chord chordC3, sustain: 1.75
   end
@@ -533,7 +537,13 @@ define :play_progression_C do |short, alt|
   else
     sleep 2.25
   end
-  play_chord chordC4, sustain: 8
+
+  if alt
+    play_chord chordC3, sustain: 8
+  else
+    play_chord chordC4, sustain: 8
+  end
+
   sleep 8
 end
 
@@ -566,14 +576,14 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     ### A ###
     sleep 16
     4.times do |i|
-      play_progression_A(i==3)
+      play_progression_A(i==3, false)
     end
     sleep 6
     
     control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_left
     ### B ###
     6.times do
-      play_progression_A(false)
+      play_progression_A(false, false)
     end
     
     ### C ###
@@ -589,18 +599,25 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     end
        
     2.times do
-      play_progression_A(false)
+      play_progression_A(false, false)
     end
 
     ### E ###
-    sleep 32
+    2.times do |i|
+      play_progression_C(false, i==1)
+    end
+
     ### F ###
-    sleep 32
+    2.times do
+      play_progression_A(false, false)
+    end
     
     control r, amp: amp_factor_mp*amp_master*amp_piano_switch*amp_piano_left
     use_bpm bpm_slow
     ### G ###
-    sleep 32
+    2.times do |i|
+      play_progression_A(false, i==1)
+    end
   end
 end
 
