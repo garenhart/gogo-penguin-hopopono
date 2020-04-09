@@ -537,6 +537,28 @@ define :play_progression_C do |short, alt|
   sleep 8
 end
 
+define :play_ppD1 do |base, partial|
+  play_pattern_timed [base, base+7, base+12, base+12, :r], [0.5, 0.25, 0.5, 0.5, 1.25], release: 0.5
+  if partial
+    sleep 1
+  else
+    play_pattern_timed [base+16, base+7, base+4], [0.25, 0.25, 0.5], release: 0.5
+  end
+end
+
+define :play_ppD2 do |base|
+  play_pattern_timed [base, base+7, base+12, base+12, base+7, base+2, base-5], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
+end
+
+define :play_ppD4 do |base, partial|
+  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.25
+  if partial
+    sleep 1
+  else
+    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
+  end
+end
+
 with_fx :reverb, room: 0.8, mix: 0.7 do |r|
   live_loop :piano_left do
     use_synth :piano
@@ -557,8 +579,19 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     ### C ###
     play_progression_C(true, false) # includes bar #48 (7/8)
     play_progression_C(false, true)
+    
     ### D ###
-    sleep 64
+    2.times do |i|
+      play_ppD1(:g1, false)
+      play_ppD2(:a1)
+      play_ppD1(:c2, true)
+      play_ppD4(:c2, i == 1)
+    end
+       
+    2.times do
+      play_progression_A(false)
+    end
+
     ### E ###
     sleep 32
     ### F ###
