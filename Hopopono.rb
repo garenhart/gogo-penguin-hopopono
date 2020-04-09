@@ -20,8 +20,8 @@ amp_kick = 0.5
 amp_snare = 0.6
 amp_hh = 0.5
 amp_bass = 0.3
-amp_piano_left = 0.5
-amp_piano_right = 0.5
+amp_piano_left = 0.7
+amp_piano_right = 0.7
 amp_piano_right_sup = 0.7
 
 amp_piano_switch = 1
@@ -41,9 +41,7 @@ d_hh_open = 4
 d_hh_pedal = 5
 
 #########
-#       #
 # DRUMS #
-#       #
 #########
 
 define :gogo_kick do
@@ -344,9 +342,7 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
 end
 
 ########
-#      #
 # BASS #
-#      #
 ########
 
 # bass pattern functions
@@ -395,7 +391,7 @@ define :play_bpD4 do |base, pause, partial|
   if partial
     sleep pause
   else
-    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.25
+    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
   end
 end
 
@@ -492,27 +488,52 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
 end
 
 #########
-#       #
 # PIANO #
-#       #
 #########
 
-gogo_chordA1 = [:G2, :D3, :B3]
-gogo_chordA2 = [:A2, :E3, :C4]
-gogo_chordA3 = [:E2, :B2, :G3]
-gogo_chordA4 = [:C2, :G2, :E3]
+chordA1 = [:g2, :d3, :b3]
+chordA2 = [:a2, :e3, :c4]
+chordA3 = [:e2, :b2, :g3]
+chordA4 = [:c2, :g2, :e3]
 
-define :play_progressionA do |change_bmp|
-  play_chord gogo_chordA1, sustain: 3
+chordC1 = [:bb2, :f3, :c4, :d4]
+chordC2 = [:g2, :d3, :bb3]
+chordC3 = [:f2, :c3, :a3]
+chordC3_alt = [:eb2, :bb2, :g3]
+chordC4 = [:eb2, :bb2, :g3]
+
+define :play_progression_A do |change_bmp|
+  play_chord chordA1, sustain: 3
   sleep 4
-  play_chord gogo_chordA2, sustain: 0.75
+  play_chord chordA2, sustain: 0.75
   sleep 1.75
-  play_chord gogo_chordA3, sustain: 1.25
+  play_chord chordA3, sustain: 1.25
   sleep 2.25
-  play_chord gogo_chordA4, sustain: 12
+  play_chord chordA4, sustain: 12
   
   use_bpm bpm_fast if change_bmp
   
+  sleep 8
+end
+
+define :play_progression_C do |short, alt|
+  play_chord chordC1, sustain: 3
+  sleep 4
+  play_chord chordC2, sustain: 0.75
+  sleep 1.75
+ 
+  if alt
+    play_chord chordC3_alt, sustain: 1.75
+  else
+    play_chord chordC3, sustain: 1.75
+  end
+
+  if short
+    sleep 1.75
+  else
+    sleep 2.25
+  end
+  play_chord chordC4, sustain: 8
   sleep 8
 end
 
@@ -523,18 +544,19 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     ### A ###
     sleep 16
     4.times do |i|
-      play_progressionA(i==3)
+      play_progression_A(i==3)
     end
     sleep 6
     
     control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_left
     ### B ###
     6.times do
-      play_progressionA(false)
+      play_progression_A(false)
     end
     
     ### C ###
-    sleep 31.5
+    play_progression_C(true, false) # includes bar #48 (7/8)
+    play_progression_C(false, true)
     ### D ###
     sleep 64
     ### E ###
@@ -549,7 +571,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
   end
 end
 
-# right hand pattern blocks
+# right hand
 rh_pattern1 = [[:b4, :b4, :d5, :b4], [:fs5, :g5, :b4, :g5], [:e5, :b4, :b4, :e5]]
 rh_pattern2 = [[:a4, :a4, :c5, :a4], [:e5, :f5, :a4, :f5], [:d5, :a4, :a4, :d5]]
 
