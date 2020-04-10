@@ -12,7 +12,7 @@
 use_debug true
 
 bpm_slow = 90
-bpm_fast = 106
+bpm_fast = 103
 
 # mixer
 amp_master = 1
@@ -219,6 +219,7 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     end
     gogo_kick
     sleep 8
+    sleep 8 
   end
 end
 
@@ -273,6 +274,7 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
       play_dspA
     end
     sleep 8
+    sleep 8 
   end
 end
 
@@ -338,6 +340,7 @@ with_fx :reverb, room: 0.4, mix: 0.5 do |r|
     end
     gogo_hh
     sleep 8
+    sleep 8 
   end
 end
 
@@ -484,6 +487,7 @@ with_fx :reverb, room: 0.9, mix: 0.4 do |r|
       play_bpA
       sleep 8
     end
+    sleep 8 
   end
 end
 
@@ -618,6 +622,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     2.times do |i|
       play_progression_A(false, i==1)
     end
+    sleep 8 
   end
 end
 
@@ -696,6 +701,7 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     use_bpm bpm_slow
     ### G ###
     sleep 32
+    sleep 8 
   end
 end
 
@@ -797,5 +803,6 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     2.times do
       play_supplement_pattern1
     end
+    sleep 8 
   end
 end
