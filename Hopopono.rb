@@ -18,7 +18,7 @@ bpm_fast = 103
 amp_master = 1
 amp_kick = 0.2
 amp_snare = 0.5
-amp_hh = 0.5
+amp_hh = 0.6
 amp_bass = 0.3
 amp_piano_left = 0.5
 amp_piano_right = 0.5
@@ -52,12 +52,13 @@ define :gogo_snare do
   sample :drum_snare_soft, rpitch: 6
 end
 
+# substituting snare for hi-hat seems to work better for now
 define :gogo_hh do
-  sample :drum_cymbal_closed, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_hh
+  sample :drum_cymbal_closed
 end
 
 define :gogo_hh_open do
-  sample :drum_cymbal_open, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_hh
+  sample :drum_cymbal_closed
 end
 
 define :gogo_hh_pedal do
@@ -126,20 +127,21 @@ define :play_dspB2 do |randomize|
   play_drum_pattern(0.25, d_snare, [0.75, 0.5, 0.5, 0.75, 0.5, 0.25, 0.25, 0.25])
 end
 
+# substituting snare for hi-hat seems to work better here for now
 define :play_dcpB2 do |randomize|
-  play_drum_pattern(0, d_hh, [0.5, 0.125, 0.125, 0.5, 0.5])
+  play_drum_pattern(0, d_snare, [0.5, 0.125, 0.125, 0.5, 0.5])
   if randomize && one_in(4)
     play_drum_pattern(0, d_hh_open, [0.5])
   else
-    play_drum_pattern(0, d_hh, [0.5])
+    play_drum_pattern(0, d_snare, [0.5])
   end
   
-  play_drum_pattern(0, d_hh, [0.25, 0.5, 0.5])
+  play_drum_pattern(0, d_snare, [0.25, 0.5, 0.5])
   
   if randomize && one_in(8)
     play_drum_pattern(0, d_hh_open, [0.5])
   else
-    play_drum_pattern(0, d_hh, [0.5])
+    play_drum_pattern(0, d_snare, [0.5])
   end
 end
 
@@ -153,12 +155,13 @@ define :play_dspF2 do
   play_drum_pattern(1, d_snare, [1.75, 0.75, 0.25, 0.25])
 end
 
+# substituting snare for hi-hat seems to work better here for now
 define :play_dcpF1 do
-  play_drum_pattern(0, d_snare, [0.75, 0.75, 1, 0.75, 0.75])
+  play_drum_pattern(0, d_hh, [0.75, 0.75, 1, 0.75, 0.75])
 end
 
 define :play_dcpF2 do
-  play_drum_pattern(0, d_snare, [0.5, 0.25, 0.5])
+  play_drum_pattern(0, d_hh, [0.5, 0.25, 0.5])
   11.times do
     gogo_hh
     sleep 0.25
@@ -223,7 +226,7 @@ with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   end
 end
 
-with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   live_loop :drum_snare do
     control r, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_snare
     ### A ###
