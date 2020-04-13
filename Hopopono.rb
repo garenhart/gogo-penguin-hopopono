@@ -16,13 +16,13 @@ bpm_fast = 103
 
 # mixer
 amp_master = 1
-amp_kick = 0.5
-amp_snare = 0.6
+amp_kick = 0.2
+amp_snare = 0.5
 amp_hh = 0.5
 amp_bass = 0.3
-amp_piano_left = 0.7
-amp_piano_right = 0.7
-amp_piano_right_sup = 0.7
+amp_piano_left = 0.5
+amp_piano_right = 0.5
+amp_piano_right_sup = 0.5
 
 amp_piano_switch = 1
 amp_drums_switch = 1
@@ -45,7 +45,7 @@ d_hh_pedal = 5
 #########
 
 define :gogo_kick do
-  node_kick = sample :bd_tek
+  node_kick = sample :bd_tek, rpitch: -4, start: 0.01, finish: 1, rate: 0.9
 end
 
 define :gogo_snare do
@@ -136,7 +136,7 @@ define :play_dcpB2 do |randomize|
   
   play_drum_pattern(0, d_hh, [0.25, 0.5, 0.5])
   
-  if randomize && one_in(4)
+  if randomize && one_in(8)
     play_drum_pattern(0, d_hh_open, [0.5])
   else
     play_drum_pattern(0, d_hh, [0.5])
@@ -168,7 +168,7 @@ end
 
 use_bpm bpm_slow
 
-with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   live_loop :drum_kick do
     control r, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_kick
     ### A ###
@@ -398,7 +398,7 @@ define :play_bpD4 do |base, pause, partial|
   end
 end
 
-with_fx :reverb, room: 0.9, mix: 0.4 do |r|
+with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   live_loop :bass do
     use_synth :fm
     control r, amp: amp_factor_mp*amp_master*amp_bass_switch*amp_bass
@@ -507,14 +507,14 @@ chordC3 = [:f2, :c3, :a3]
 chordC4 = [:eb2, :bb2, :g3]
 
 define :play_progression_A do |change_bmp, last|
-  play_chord chordA1, sustain: 3
+  play_chord chordA1, sustain: 4
   sleep 4
-  play_chord chordA2, sustain: 0.75
+  play_chord chordA2, sustain: 1.75
   sleep 1.75
-  play_chord chordA3, sustain: 1.25
+  play_chord chordA3, sustain: 2.25
   sleep 2.25
   if last
-    play_chord chordA4_last, sustain: 12
+    play_chord chordA4_last, sustain: 8
   else
     play_chord chordA4, sustain: 8
   end
@@ -525,15 +525,15 @@ define :play_progression_A do |change_bmp, last|
 end
 
 define :play_progression_C do |short, alt|
-  play_chord chordC1, sustain: 3
+  play_chord chordC1, sustain: 4
   sleep 4
-  play_chord chordC2, sustain: 0.75
+  play_chord chordC2, sustain: 1.75
   sleep 1.75
  
   if alt
-    play_chord chordC4, sustain: 1.75
+    play_chord chordC4, sustain: 2.25
   else
-    play_chord chordC3, sustain: 1.75
+    play_chord chordC3, sustain: 2.25
   end
 
   if short
