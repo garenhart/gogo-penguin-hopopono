@@ -19,8 +19,8 @@ amp_master = 1
 amp_kick = 0.5
 amp_snare = 0.5
 amp_hh = 0.6
-amp_bass = 0.3
-amp_piano_left = 0.5
+amp_bass = 0.5
+amp_piano_left = 0.7
 amp_piano_right = 0.5
 amp_piano_right_sup = 0.5
 
@@ -401,7 +401,7 @@ define :play_bpD4 do |base, pause, partial|
   end
 end
 
-with_fx :reverb, room: 0.6, mix: 0.4 do |r|
+with_fx :reverb, room: 0.4, mix: 0.4 do |r|
   live_loop :bass do
     use_synth :fm
     control r, amp: amp_factor_mp*amp_master*amp_bass_switch*amp_bass
