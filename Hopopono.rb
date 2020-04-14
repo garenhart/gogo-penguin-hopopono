@@ -16,7 +16,7 @@ bpm_fast = 103
 
 # mixer
 amp_master = 1
-amp_kick = 0.2
+amp_kick = 0.5
 amp_snare = 0.5
 amp_hh = 0.6
 amp_bass = 0.3
@@ -45,7 +45,7 @@ d_hh_pedal = 5
 #########
 
 define :gogo_kick do
-  node_kick = sample :bd_tek, rpitch: -4, start: 0.01, finish: 1, rate: 0.9
+  node_kick = sample :bd_tek, rpitch: -4, start: 0.01
 end
 
 define :gogo_snare do
@@ -171,7 +171,7 @@ end
 
 use_bpm bpm_slow
 
-with_fx :reverb, room: 0.6, mix: 0.4 do |r|
+with_fx :reverb, room: 0.8, mix: 0.4 do |r|
   live_loop :drum_kick do
     control r, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_kick
     ### A ###
@@ -226,7 +226,7 @@ with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   end
 end
 
-with_fx :reverb, room: 0.6, mix: 0.4 do |r|
+with_fx :reverb, room: 0.8, mix: 0.4 do |r|
   live_loop :drum_snare do
     control r, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_snare
     ### A ###
@@ -281,7 +281,7 @@ with_fx :reverb, room: 0.6, mix: 0.4 do |r|
   end
 end
 
-with_fx :reverb, room: 0.4, mix: 0.5 do |r|
+with_fx :reverb, room: 0.8, mix: 0.5 do |r|
   live_loop :drum_hh do
     control r, amp: amp_factor_mp*amp_master*amp_drums_switch*amp_hh
     ### A ###
