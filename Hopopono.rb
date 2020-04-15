@@ -5,14 +5,14 @@
 # Transcription by Ben Spooner:                                  #
 # https://www.youtube.com/watch?v=2MMsHGb8MRw                    #
 #                                                                #
-# Coded by Garen Hartunian                                       #
+# Coded by Garen Hart                                            #
 #                                                                #
 ##################################################################
 
 use_debug true
 
 bpm_slow = 90
-bpm_fast = 103
+bpm_fast = 102
 
 # mixer
 amp_master = 1
@@ -58,12 +58,17 @@ define :gogo_hh do
 end
 
 define :gogo_hh_open do
-  sample :drum_cymbal_closed
+  sample :drum_cymbal_open
 end
 
 define :gogo_hh_pedal do
   sample :drum_cymbal_pedal
 end
+
+define :gogo_bell do |pitch|
+  sample :perc_bell, pitch: pitch
+end
+
 
 # drum pattern functions
 
@@ -130,7 +135,7 @@ end
 # substituting snare for hi-hat seems to work better here for now
 define :play_dcpB2 do |randomize|
   play_drum_pattern(0, d_snare, [0.5, 0.125, 0.125, 0.5, 0.5])
-  if randomize && one_in(4)
+  if randomize && one_in(8)
     play_drum_pattern(0, d_hh_open, [0.5])
   else
     play_drum_pattern(0, d_snare, [0.5])
@@ -222,7 +227,7 @@ with_fx :reverb, room: 0.8, mix: 0.4 do |r|
     end
     gogo_kick
     sleep 8
-    sleep 8 
+    sleep 8
   end
 end
 
@@ -299,7 +304,7 @@ with_fx :reverb, room: 0.8, mix: 0.5 do |r|
     ### B ###
     play_dcpB1
     23.times do
-      play_dcpB2(true)
+      play_dcpB2(false)
     end
     ### C ###
     play_dcpB2(false)
@@ -310,7 +315,7 @@ with_fx :reverb, room: 0.8, mix: 0.5 do |r|
     
     ### D ###
     16.times do
-      play_dcpB2(true)
+      play_dcpB2(false)
     end
     
     ### E ###
@@ -806,6 +811,6 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     2.times do
       play_supplement_pattern1
     end
-    sleep 8 
+    sleep 8
   end
 end
