@@ -34,11 +34,15 @@ amp_factor_mp = 0.8
 amp_factor_mf = 1.2
 amp_factor_f = 1.5
 
+pan_piano_left = -0.5
+pan_piano_right = 0.5
+
 d_kick = 1
 d_snare = 2
 d_hh = 3
 d_hh_open = 4
 d_hh_pedal = 5
+d_bell = 6
 
 #########
 # DRUMS #
@@ -66,7 +70,7 @@ define :gogo_hh_pedal do
 end
 
 define :gogo_bell do |pitch|
-  sample :perc_bell, pitch: pitch
+  sample :perc_bell, pitch: pitch, decay_level: 0.2
 end
 
 
@@ -108,6 +112,19 @@ define :play_dcpA do |hh1, hh2|
   sleep 1.75
   gogo_hh if hh2
   sleep 2.25
+end
+
+# the bell
+define :play_dbpA1 do
+  gogo_bell(-2)
+  sleep 1.75
+  gogo_bell(-4)
+  sleep 2.25
+end
+
+define :play_dbpA2 do
+  gogo_bell(-5)
+  sleep 4
 end
 
 ### B ###
@@ -292,9 +309,15 @@ with_fx :reverb, room: 0.8, mix: 0.5 do |r|
     ### A ###
     18.times do |i|
       bar = i+1
-      hh1 = (bar>4 && bar%2 >0)
-      hh2 = (bar==10 || bar==14 || bar ==18)
-      play_dcpA(hh1, hh2)
+      if bar == 14
+        play_dbpA1
+      elsif bar == 15
+        play_dbpA2
+      else
+        hh1 = (bar>4 && bar%2 >0)
+        hh2 = (bar==10 || bar==14 || bar ==18)
+        play_dcpA(hh1, hh2)
+      end
     end
     use_bpm bpm_fast
     gogo_hh
@@ -340,14 +363,16 @@ with_fx :reverb, room: 0.8, mix: 0.5 do |r|
     
     use_bpm bpm_slow
     ### G ###
-    6.times do |i|
+    4.times do |i|
       bar = i+1
       hh1 = (bar != 4)
       hh2 = (bar==2 || bar==6)
       play_dcpA(hh1, hh2)
     end
-    gogo_hh
-    sleep 8
+    play_dbpA2
+    play_dbpA1
+    play_dbpA2
+    sleep 4
     sleep 8 
   end
 end
@@ -515,16 +540,16 @@ chordC3 = [:f2, :c3, :a3]
 chordC4 = [:eb2, :bb2, :g3]
 
 define :play_progression_A do |change_bmp, last|
-  play_chord chordA1, sustain: 4
+  play_chord chordA1, sustain: 4, pan: pan_piano_left
   sleep 4
-  play_chord chordA2, sustain: 1.75
+  play_chord chordA2, sustain: 1.75, pan: pan_piano_left
   sleep 1.75
-  play_chord chordA3, sustain: 2.25
+  play_chord chordA3, sustain: 2.25, pan: pan_piano_left
   sleep 2.25
   if last
-    play_chord chordA4_last, sustain: 8
+    play_chord chordA4_last, sustain: 8, pan: pan_piano_left
   else
-    play_chord chordA4, sustain: 8
+    play_chord chordA4, sustain: 8, pan: pan_piano_left
   end
   
   use_bpm bpm_fast if change_bmp
@@ -533,15 +558,15 @@ define :play_progression_A do |change_bmp, last|
 end
 
 define :play_progression_C do |short, alt|
-  play_chord chordC1, sustain: 4
+  play_chord chordC1, sustain: 4, pan: pan_piano_left
   sleep 4
-  play_chord chordC2, sustain: 1.75
+  play_chord chordC2, sustain: 1.75, pan: pan_piano_left
   sleep 1.75
  
   if alt
-    play_chord chordC4, sustain: 2.25
+    play_chord chordC4, sustain: 2.25, pan: pan_piano_left
   else
-    play_chord chordC3, sustain: 2.25
+    play_chord chordC3, sustain: 2.25, pan: pan_piano_left
   end
 
   if short
@@ -551,33 +576,33 @@ define :play_progression_C do |short, alt|
   end
 
   if alt
-    play_chord chordC3, sustain: 8
+    play_chord chordC3, sustain: 8, pan: pan_piano_left
   else
-    play_chord chordC4, sustain: 8
+    play_chord chordC4, sustain: 8, pan: pan_piano_left
   end
 
   sleep 8
 end
 
 define :play_ppD1 do |base, partial|
-  play_pattern_timed [base, base+7, base+12, base+12, :r], [0.5, 0.25, 0.5, 0.5, 1.25], release: 0.5
+  play_pattern_timed [base, base+7, base+12, base+12, :r], [0.5, 0.25, 0.5, 0.5, 1.25], release: 0.5, pan: pan_piano_left
   if partial
     sleep 1
   else
-    play_pattern_timed [base+16, base+7, base+4], [0.25, 0.25, 0.5], release: 0.5
+    play_pattern_timed [base+16, base+7, base+4], [0.25, 0.25, 0.5], release: 0.5, pan: pan_piano_left
   end
 end
 
 define :play_ppD2 do |base|
-  play_pattern_timed [base, base+7, base+12, base+12, base+7, base+2, base-5], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5
+  play_pattern_timed [base, base+7, base+12, base+12, base+7, base+2, base-5], [0.5, 0.25, 0.5, 0.5, 0.75, 0.5, 1], release: 0.5, pan: pan_piano_left
 end
 
 define :play_ppD4 do |base, partial|
-  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.25
+  play_pattern_timed [base, base, base+7, base+12, base+12], [0.25, 0.25, 0.25, 0.5, 1.75], release: 0.25, pan: pan_piano_left
   if partial
     sleep 1
   else
-    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5
+    play_pattern_timed [base+12, base+7, base+4, base], [0.25, 0.25, 0.25, 0.25], release: 0.5, pan: pan_piano_left
   end
 end
 
@@ -602,6 +627,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     play_progression_C(true, false) # includes bar #48 (7/8)
     play_progression_C(false, true)
     
+    control r, amp: amp_factor_f*amp_master*amp_piano_switch*amp_piano_left
     ### D ###
     2.times do |i|
       play_ppD1(:g1, false)
@@ -619,6 +645,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
       play_progression_C(false, i==1)
     end
 
+    control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_left
     ### F ###
     2.times do
       play_progression_A(false, false)
@@ -647,26 +674,26 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 24
     use_bpm bpm_fast
     14.times do
-      play_pattern_timed rh_pattern1.tick, [0.25]
+      play_pattern_timed rh_pattern1.tick, [0.25], pan: pan_piano_right
     end
     
     control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_right
     ### B ###
     tick_reset # reset tick to start from the initial pattern
     32.times do
-      play_pattern_timed rh_pattern1.tick, [0.25]
+      play_pattern_timed rh_pattern1.tick, [0.25], pan: pan_piano_right
     end
     8.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern1.tick, [0.25]
+        play_pattern_timed rh_pattern1.tick, [0.25], pan: pan_piano_right
       end
     end
     
     ### C ###
     tick_reset
     7.times do
-      play_pattern_timed rh_pattern2.tick, [0.25]
+      play_pattern_timed rh_pattern2.tick, [0.25], pan: pan_piano_right
     end
     # play partial set to complete the bar 48 (7/8)
     play :e5
@@ -677,15 +704,16 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     3.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern2.tick, [0.25]
+        play_pattern_timed rh_pattern2.tick, [0.25], pan: pan_piano_right
       end
     end
     
+    control r, amp: amp_factor_f*amp_master*amp_piano_switch*amp_piano_right
     ### D ###
     8.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern1.tick, [0.25]
+        play_pattern_timed rh_pattern1.tick, [0.25], pan: pan_piano_right
       end
     end
     
@@ -693,15 +721,16 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     4.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern2.tick, [0.25]
+        play_pattern_timed rh_pattern2.tick, [0.25], pan: pan_piano_right
       end
     end
     
+    control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_right
     ### F ###
     4.times do
       tick_reset
       8.times do
-        play_pattern_timed rh_pattern1.tick, [0.25]
+        play_pattern_timed rh_pattern1.tick, [0.25], pan: pan_piano_right
       end
     end
     
@@ -714,35 +743,35 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
 end
 
 define :play_supplement_pattern1 do
-  play :a5, sustain: 4
+  play :a5, sustain: 4, pan: pan_piano_right
   sleep 4
-  play :d6, sustain: 1.75
+  play :d6, sustain: 1.75, pan: pan_piano_right
   sleep 1.75
-  play :c6, sustain: 2.25
+  play :c6, sustain: 2.25, pan: pan_piano_right
   sleep 2.25
-  play :b5, sustain: 8
+  play :b5, sustain: 8, pan: pan_piano_right
   sleep 8
 end
 
 define :play_supplement_pattern2 do
-  play :a5, sustain: 4
+  play :a5, sustain: 4, pan: pan_piano_right
   sleep 4
-  play :bb5, sustain: 1.75
+  play :bb5, sustain: 1.75, pan: pan_piano_right
   sleep 1.75
-  play :g5, sustain: 2.25
+  play :g5, sustain: 2.25, pan: pan_piano_right
   sleep 2.25
-  play :a5, sustain: 8
+  play :a5, sustain: 8, pan: pan_piano_right
   sleep 8
 end
 
 define :play_supplement_pattern3 do
-  play :a5, sustain: 4
+  play :a5, sustain: 4, pan: pan_piano_right
   sleep 4
-  play :bb5, sustain: 1.75
+  play :bb5, sustain: 1.75, pan: pan_piano_right
   sleep 1.75
-  play :a5, sustain: 2.25
+  play :a5, sustain: 2.25, pan: pan_piano_right
   sleep 2.25
-  play :g5, sustain: 8
+  play :g5, sustain: 8, pan: pan_piano_right
   sleep 8
 end
 
@@ -756,13 +785,13 @@ with_fx :reverb, room: 0.8, mix: 0.6 do |r|
     sleep 48
     
     2.times do |i|
-      play :a5, sustain: 4
+      play :a5, sustain: 4, pan: pan_piano_right
       sleep 4
-      play :d6, sustain: 1.75
+      play :d6, sustain: 1.75, pan: pan_piano_right
       sleep 1.75
-      play :c6, sustain: 2.25
+      play :c6, sustain: 2.25, pan: pan_piano_right
       sleep 2.25
-      play :b5, sustain: 8
+      play :b5, sustain: 8, pan: pan_piano_right
       use_bpm bpm_fast if i==1
       sleep 8
     end
