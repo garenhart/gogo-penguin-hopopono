@@ -617,7 +617,7 @@ with_fx :reverb, room: 0.8, mix: 0.7 do |r|
     end
     sleep 6
     
-    control r, amp: amp_factor_mf*amp_master*amp_piano_switch*amp_piano_left
+    control r, amp: amp_factor_f*amp_master*amp_piano_switch*amp_piano_left
     ### B ###
     6.times do
       play_progression_A(false, false)
