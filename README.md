@@ -4,4 +4,4 @@
  Transcription by Ben Spooner:                                  
  https://www.youtube.com/watch?v=2MMsHGb8MRw                    
                                                                 
- Coded in Sonic Pi by Garen Hartunian                           
+ Coded in Sonic Pi by Garen Hart                           
