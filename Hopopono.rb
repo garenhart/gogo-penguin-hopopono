@@ -397,7 +397,7 @@ define :play_bpB1 do |note|
 end
 
 define :play_bpB2 do |n1, n2, n3|
-  play_pattern_timed [:c4, :c4, :r, n1, :e3, :b2, :e2, n2, n3], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1, 0.25, 0.25], release: 0.5
+  play_pattern_timed [:a3, :a3, :r, n1, :e3, :b2, :e2, n2, n3], [0.5, 0.5, 0.5, 0.25, 0.5, 0.25, 1, 0.25, 0.25], release: 0.5
 end
 
 define :play_bpB3 do |n1, n2, n3, n4|
