@@ -1,10 +1,12 @@
- GOGO PENGUIN - HOPOPONO                                        
- Original video: https://www.youtube.com/watch?v=-UtAV_azaBc    
+GOGO PENGUIN - HOPOPONO                                        
+Original video: https://www.youtube.com/watch?v=-UtAV_azaBc    
                                                                 
- Transcription by Ben Spooner:                                  
- https://www.youtube.com/watch?v=2MMsHGb8MRw                    
+Transcription by Ben Spooner:                                  
+https://www.youtube.com/watch?v=2MMsHGb8MRw                    
                                                                 
- Coded in Sonic Pi by Garen Hart                           
+Coded in Sonic Pi by Garen Hart:
+https://garenhart.bandcamp.com/releases/
+
 
 Note: The code size exceeds the buffer allowance, run using Sonic Pi run_file command:
 
