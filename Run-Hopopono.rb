@@ -1,0 +1,1 @@
+run_file get(:sp_path)+"gogo-penguin-hopopono/hopopono.rb"

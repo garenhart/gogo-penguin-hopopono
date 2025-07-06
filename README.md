@@ -15,5 +15,5 @@ run_file "~/sonicpi_projects/gogo-penguin-hopopono/hopopono.rb"
 or
 
 run_file get(:sp_path)+"gogo-penguin-hopopono/hopopono.rb"
-after adding following line to .sonic-pi/init.rb:
+after adding following line to .sonic-pi/config/init.rb:
     set :sp_path, "~/sonicpi_projects/" 
